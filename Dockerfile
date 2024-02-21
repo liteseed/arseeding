@@ -1,14 +1,13 @@
-FROM alpine:latest
-MAINTAINER sandy <sandy@ever.finance>
+FROM golang:1.22.0-bookworm
 
-ENV PATH /go/bin:/usr/local/go/bin:$PATH
-ENV GOPATH /go
+WORKDIR /app
 
-WORKDIR /arseeding
+COPY go.mod ./
 
-VOLUME ["/arseeding/data"]
+RUN go mod download
+RUN go build -o ./build/arseeding ./cmd
 
-COPY cmd/arseeding /arseeding/arseeding
 EXPOSE 8080
 
-ENTRYPOINT [ "/arseeding/arseeding" ]
+CMD [ "./build/arseeding" ]
+
