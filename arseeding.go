@@ -2,6 +2,11 @@ package arseeding
 
 import (
 	"context"
+	"os"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/everFinance/arseeding/cache"
 	"github.com/everFinance/arseeding/config"
 	"github.com/everFinance/arseeding/rawdb"
@@ -13,10 +18,6 @@ import (
 	paySdk "github.com/everVision/everpay-kits/sdk"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
-	"os"
-	"strings"
-	"sync"
-	"time"
 )
 
 var log = common.NewLog("arseeding")
@@ -53,7 +54,7 @@ type Arseeding struct {
 
 func New(
 	boltDirPath, mySqlDsn string, sqliteDir string, useSqlite bool,
-	arWalletKeyPath string, arNode, payUrl string, noFee bool, enableManifest bool,
+	arWallet string, arNode, payUrl string, noFee bool, enableManifest bool,
 	useS3 bool, s3AccKey, s3SecretKey, s3BucketPrefix, s3Region, s3Endpoint string,
 	use4EVER bool, useAliyun bool, aliyunEndpoint, aliyunAccKey, aliyunSecretKey, aliyunPrefix string,
 	useMongoDb bool, mongodbUri string,
@@ -95,7 +96,7 @@ func New(
 	if err = wdb.Migrate(noFee, enableManifest); err != nil {
 		panic(err)
 	}
-	bundler, err := goar.NewWalletFromPath(arWalletKeyPath, arNode)
+	bundler, err := goar.NewWallet([]byte(arWallet), arNode)
 	if err != nil {
 		panic(err)
 	}

@@ -2,6 +2,12 @@ package arseeding
 
 import (
 	"encoding/json"
+	"math"
+	"os"
+	"path"
+	"strings"
+	"time"
+
 	"github.com/everFinance/arseeding/schema"
 	"github.com/everFinance/goar/types"
 	"gorm.io/datatypes"
@@ -10,11 +16,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
-	"math"
-	"os"
-	"path"
-	"strings"
-	"time"
 )
 
 const (
